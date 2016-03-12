@@ -277,6 +277,8 @@ int parse_jpeg(struct cedarJpeg_handle *jpeg, const uint8_t *data, const int len
 
                                 }
 			}
+			if ((jpeg->jpeg.comp[0].samp_v == 0) || (jpeg->jpeg.comp[0].samp_h == 0)) 
+			    return 0;
 			break;
 
 		case M_DRI:

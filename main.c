@@ -42,7 +42,7 @@
 #include "ve.h"
 #include "jpeg.h"
 
-#include <EGL/eglplatform_fb.h>
+#include <EGL/eglplatform.h>
 #include <EGL/fbdev_window.h>  
 #include <EGL/egl.h>
 #include <EGL/eglext.h>
@@ -141,8 +141,9 @@ static void set_format(struct jpeg_t *jpeg, void *regs)
 
 static void set_size(struct jpeg_t *jpeg, void *regs)
 {
-	uint16_t h = (jpeg->height - 1) / (8 * jpeg->comp[0].samp_v);
-	uint16_t w = (jpeg->width - 1) / (8 * jpeg->comp[0].samp_h);
+	uint16_t h, w;
+	h = (jpeg->height - 1) / (8 * jpeg->comp[0].samp_v);
+	w = (jpeg->width - 1) / (8 * jpeg->comp[0].samp_h);
 	writel((uint32_t)h << 16 | w, regs + CEDARV_MPEG_JPEG_SIZE);
 }
 
@@ -269,7 +270,10 @@ int cedarLoadJpeg(CEDAR_JPEG_HANDLE handle, const char *filename)
 
 	//memset(jpeg, 0, sizeof(*jpeg));
 	if (!parse_jpeg(jpeg, jpeg->in_buf, s.st_size))
+	{
 		warnx("Can't parse JPEG");
+		return 0;
+	}
 	return 1;
 
 }
@@ -281,7 +285,10 @@ int cedarLoadMem(CEDAR_JPEG_HANDLE handle, uint8_t *buf, size_t size)
 	jpeg->in_mapped = 0;
 
 	if (!parse_jpeg(jpeg, jpeg->in_buf, jpeg->in_size))
+	{
 		warnx("Can't parse JPEG");
+		return 0;
+	}
 	return 1;
 }
 
