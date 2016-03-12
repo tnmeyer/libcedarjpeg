@@ -51,7 +51,7 @@
 #include <GLES2/gl2ext.h>
 
 #include <linux/types.h>
-#include <linux/sunxi_disp_ioctl.h>
+#include "drv_display_sun4i.h"
 #include <errno.h>
 #include <sys/ioctl.h>
 
